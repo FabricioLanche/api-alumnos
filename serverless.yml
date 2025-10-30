@@ -30,7 +30,7 @@ functions:
     events:
       - http:
           path: /alumnos/buscar
-          method: post            # cambiado de get a post
+          method: get
           cors: true
           integration: lambda
 
