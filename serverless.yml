@@ -16,7 +16,7 @@ functions:
           path: /alumnos/listar
           method: post
           cors: true
-          integration: lambda
+          integration: lambda-proxy
   crear:
     handler: CrearAlumno.lambda_handler
     events:
@@ -24,7 +24,7 @@ functions:
           path: /alumnos/crear
           method: post
           cors: true
-          integration: lambda
+          integration: lambda-proxy
   buscar:
     handler: BuscarAlumno.lambda_handler
     events:
@@ -41,7 +41,7 @@ functions:
           path: /alumnos/modificar
           method: put
           cors: true
-          integration: lambda
+          integration: lambda-proxy
 
   eliminar:
     handler: EliminarAlumno.lambda_handler
@@ -50,5 +50,5 @@ functions:
           path: /alumnos/eliminar
           method: delete
           cors: true
-          integration: lambda
+          integration: lambda-proxy
 
