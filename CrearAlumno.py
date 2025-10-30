@@ -9,13 +9,12 @@ def lambda_handler(event, context):
     
     tenant_id = body.get('tenant_id')
     alumno_id = body.get('alumno_id')
-    nombres = body.get('nombres')
-    apellidos = body.get('apellidos')
+    alumno_datos = body.get('alumno_datos')
     
-    if not all([tenant_id, alumno_id, nombres, apellidos]):
+    if not all([tenant_id, alumno_id, alumno_datos]):
         return {
             'statusCode': 400,
-            'body': json.dumps({'error': 'tenant_id, alumno_id, nombres and apellidos are required'})
+            'body': json.dumps({'error': 'tenant_id, alumno_id and alumno_datos are required'})
         }
     
     # Proceso
@@ -25,8 +24,7 @@ def lambda_handler(event, context):
         Item={
             'tenant_id': tenant_id,
             'alumno_id': alumno_id,
-            'nombres': nombres,
-            'apellidos': apellidos
+            'alumno_datos': alumno_datos
         }
     )
     # Salida (json)

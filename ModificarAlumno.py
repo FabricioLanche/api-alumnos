@@ -9,46 +9,31 @@ def lambda_handler(event, context):
     
     tenant_id = body.get('tenant_id')
     alumno_id = body.get('alumno_id')
-    nombres = body.get('nombres')
-    apellidos = body.get('apellidos')
+    alumno_datos = body.get('alumno_datos')
     
-    if not all([tenant_id, alumno_id]):
+    if not all([tenant_id, alumno_id, alumno_datos]):
         return {
             'statusCode': 400,
-            'body': json.dumps({'error': 'tenant_id and alumno_id are required'})
+            'body': json.dumps({'error': 'tenant_id, alumno_id and alumno_datos are required'})
         }
     
     # Proceso
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('t_alumnos')
     
-    update_expression = []
-    expression_values = {}
-    
-    if nombres:
-        update_expression.append('nombres = :nombres')
-        expression_values[':nombres'] = nombres
-    if apellidos:
-        update_expression.append('apellidos = :apellidos')
-        expression_values[':apellidos'] = apellidos
-    
-    if not update_expression:
-        return {
-            'statusCode': 400,
-            'body': json.dumps({'error': 'At least one field to update is required'})
-        }
-    
     response = table.update_item(
         Key={
             'tenant_id': tenant_id,
             'alumno_id': alumno_id
         },
-        UpdateExpression='SET ' + ', '.join(update_expression),
-        ExpressionAttributeValues=expression_values,
+        UpdateExpression='SET alumno_datos = :alumno_datos',
+        ExpressionAttributeValues={
+            ':alumno_datos': alumno_datos
+        },
         ReturnValues='ALL_NEW'
     )
     # Salida (json)
     return {
         'statusCode': 200,
-        'body': json.dumps({'message': 'Alumno modificado exitosamente', 'response': response}, default=str)
+        'body': json.dumps({'message': 'Alumno modificado exitosamente', 'alumno': response.get('Attributes')}, default=str)
     }

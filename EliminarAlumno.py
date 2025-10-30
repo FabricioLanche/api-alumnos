@@ -19,14 +19,34 @@ def lambda_handler(event, context):
     # Proceso
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('t_alumnos')
-    response = table.delete_item(
+    
+    # Primero verificar si existe
+    get_response = table.get_item(
         Key={
             'tenant_id': tenant_id,
             'alumno_id': alumno_id
         }
     )
+    
+    if 'Item' not in get_response:
+        return {
+            'statusCode': 404,
+            'body': json.dumps({'error': 'Alumno no encontrado'})
+        }
+    
+    # Eliminar
+    response = table.delete_item(
+        Key={
+            'tenant_id': tenant_id,
+            'alumno_id': alumno_id
+        },
+        ReturnValues='ALL_OLD'
+    )
     # Salida (json)
     return {
         'statusCode': 200,
-        'body': json.dumps({'message': 'Alumno eliminado exitosamente', 'response': response}, default=str)
+        'body': json.dumps({
+            'message': 'Alumno eliminado exitosamente',
+            'alumno_eliminado': response.get('Attributes')
+        }, default=str)
     }
