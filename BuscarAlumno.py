@@ -1,4 +1,5 @@
 import boto3
+import json
 
 def lambda_handler(event, context):
     # Entrada (json)
@@ -10,7 +11,7 @@ def lambda_handler(event, context):
     if not tenant_id or not alumno_id:
         return {
             'statusCode': 400,
-            'body': 'tenant_id and alumno_id are required'
+            'body': json.dumps({'error': 'tenant_id and alumno_id are required'})
         }
     
     # Proceso
@@ -25,5 +26,5 @@ def lambda_handler(event, context):
     # Salida (json)
     return {
         'statusCode': 200,
-        'response': response
+        'body': json.dumps(response, default=str)
     }
