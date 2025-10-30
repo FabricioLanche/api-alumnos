@@ -3,7 +3,10 @@ import json
 
 def lambda_handler(event, context):
     # Entrada (json)
-    body = json.loads(event.get('body', '{}'))
+    body = event.get('body', '{}')
+    if isinstance(body, str):
+        body = json.loads(body)
+    
     tenant_id = body.get('tenant_id')
     alumno_id = body.get('alumno_id')
     nombres = body.get('nombres')
