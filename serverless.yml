@@ -32,7 +32,7 @@ functions:
           path: /alumnos/buscar
           method: get
           cors: true
-          integration: lambda
+          integration: lambda-proxy
 
   modificar:
     handler: ModificarAlumno.lambda_handler
